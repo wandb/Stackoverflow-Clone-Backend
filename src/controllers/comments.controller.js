@@ -1,8 +1,8 @@
-const { validationResult } = require('express-validator');
-const { responseHandler, asyncHandler } = require('../helpers');
-const { commentsService } = require('../services');
+const {validationResult} = require('express-validator');
+const {responseHandler, asyncHandler} = require('../helpers');
+const {commentsService} = require('../services');
 
-const Comment = (comment) => ({
+const Comment = comment => ({
   body: comment.body,
   userId: comment.userId,
   postId: comment.postId,

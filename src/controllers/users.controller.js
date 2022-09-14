@@ -1,26 +1,23 @@
-const { validationResult } = require('express-validator');
-const { responseHandler, asyncHandler } = require('../helpers');
-const { usersService } = require('../services');
+const {validationResult} = require('express-validator');
+const {responseHandler, asyncHandler} = require('../helpers');
+const {usersService} = require('../services');
 
-const User = (user) => ({
+const User = user => ({
   username: user.username,
   password: user.password,
 });
 
 exports.getOneUser = asyncHandler(async (req, res) => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
 
-    await usersService.retrieveOne(
-      id,
-      (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.status(err.code).json(err);
-        }
-        return res.status(data.code).json(data);
-      },
-    );
+    await usersService.retrieveOne(id, (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.status(err.code).json(err);
+      }
+      return res.status(data.code).json(data);
+    });
   } catch (err) {
     console.log(err);
     return res
@@ -31,15 +28,13 @@ exports.getOneUser = asyncHandler(async (req, res) => {
 
 exports.getAllUsers = asyncHandler(async (req, res) => {
   try {
-    await usersService.retrieveAll(
-      (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.status(err.code).json(err);
-        }
-        return res.status(data.code).json(data);
-      },
-    );
+    await usersService.retrieveAll((err, data) => {
+      if (err) {
+        console.log(err);
+        return res.status(err.code).json(err);
+      }
+      return res.status(data.code).json(data);
+    });
   } catch (err) {
     console.log(err);
     return res

@@ -19,9 +19,7 @@ app.use(compression());
 // logger
 app.use(morgan('dev'));
 
-// Get port from environment and store in Express.
-const PORT = portUtils.normalizePort(process.env.PORT || '5000');
-app.set('port', PORT);
+app.set('port', portUtils.PORT);
 
 // cors enable
 app.use(cors());
@@ -34,7 +32,7 @@ app.use(helmet());
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 // TODO: connection with client setup
 // if (process.env.NODE_ENV === 'production') {
@@ -54,12 +52,13 @@ const server = http.createServer(app);
 // Event listener for HTTP server 'listening' event.
 const onListening = () => {
   const address = server.address();
-  const bind = typeof address === 'string' ? `pipe ${address}` : `port ${address.port}`;
+  const bind =
+    typeof address === 'string' ? `pipe ${address}` : `port ${address.port}`;
   debug(`Server running on ${bind}, http://localhost:${address.port}`);
   console.log(`Server running on ${bind}, http://localhost:${address.port}`);
 };
 
 // Listen on provided port, on all network interfaces.
-server.listen(PORT);
+server.listen(portUtils.PORT);
 server.on('error', portUtils.onError);
 server.on('listening', onListening);

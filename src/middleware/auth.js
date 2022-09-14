@@ -1,6 +1,6 @@
 const JWT = require('jsonwebtoken');
 const config = require('../config');
-const { responseHandler } = require('../helpers');
+const {responseHandler} = require('../helpers');
 
 const auth = (req, res, next) => {
   const token = req.header('x-auth-token');

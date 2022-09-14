@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const getEnvVariable = (key) => {
+const getEnvVariable = key => {
   const value = process.env[key];
   if (!value && process.env.NODE_ENV === 'production') {
     throw new Error(`ENVIRONMENT VARIABLE '${key}' NOT SPECIFIED.`);
@@ -16,10 +16,10 @@ const getEnvVariable = (key) => {
 
 const config = {
   DB: {
-    HOST: getEnvVariable('HOST'),
-    USER: getEnvVariable('USER'),
+    HOST: getEnvVariable('DB_HOST'),
+    USER: getEnvVariable('DB_USER'),
+    PASSWORD: getEnvVariable('DB_PASSWORD'),
     DATABASE: getEnvVariable('DATABASE'),
-    PASSWORD: getEnvVariable('PASSWORD'),
   },
   JWT: {
     SECRET: getEnvVariable('JWT_SECRET'),

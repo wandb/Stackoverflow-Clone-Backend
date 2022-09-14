@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const utils = require('../utils');
-const { responseHandler } = require('../helpers');
+const {responseHandler} = require('../helpers');
 const {
   PostsModel,
   TagsModel,
@@ -9,41 +9,37 @@ const {
   UsersModel,
 } = require('../models');
 
-exports.create = async (newPost, result) => await PostsModel
-  .create({
+exports.create = async (newPost, result) =>
+  await PostsModel.create({
     title: newPost.title,
     body: newPost.body,
     user_id: newPost.userId,
-  })
-  .catch((error) => {
+  }).catch(error => {
     console.log(error);
     result(responseHandler(false, 500, 'Something went wrong', null), null);
     return null;
   });
 
 exports.remove = async (postId, t) => {
-  await PostsModel
-    .destroy({ where: { id: postId } }, { transaction: t })
-    .then(() => ({ status: true, message: 'Post Removed' }))
-    .catch((error) => {
+  await PostsModel.destroy({where: {id: postId}}, {transaction: t})
+    .then(() => ({status: true, message: 'Post Removed'}))
+    .catch(error => {
       console.log(error);
       throw new Error(`Post Delete Operation Failed: ${error}`);
     });
 };
 
-exports.incrementViews = async (postId) => {
-  await PostsModel.increment('views',
-    {
-      by: 1,
-      where: { id: postId },
-    })
-    .catch((error) => {
-      console.log('error: ', error);
-      throw new Error('There isn\'t any post by this id');
-    });
+exports.incrementViews = async postId => {
+  await PostsModel.increment('views', {
+    by: 1,
+    where: {id: postId},
+  }).catch(error => {
+    console.log('error: ', error);
+    throw new Error("There isn't any post by this id");
+  });
 };
 
-exports.retrieveOne = async (postId) => {
+exports.retrieveOne = async postId => {
   let queryResult = await PostsModel.findOne({
     distinct: true,
     where: {
@@ -72,13 +68,13 @@ exports.retrieveOne = async (postId) => {
         attributes: [],
       },
     ],
-  }).catch((error) => {
+  }).catch(error => {
     console.log(error);
     throw new Error('Something went wrong!');
   });
 
   if (utils.conditional.isNull(queryResult)) {
-    throw new Error('There isn\'t any post by this id');
+    throw new Error("There isn't any post by this id");
   }
 
   queryResult = utils.array.sequelizeResponse(
@@ -92,7 +88,7 @@ exports.retrieveOne = async (postId) => {
     'created_at',
     'updated_at',
     'views',
-    'tags',
+    'tags'
   );
 
   return queryResult;
@@ -133,26 +129,26 @@ exports.retrieveAll = async (tagName = '') => {
     };
   }
 
-  const posts = await PostsModel
-    .findAll(query)
-    .catch((error) => {
-      console.log(error);
-      throw new Error('Something went wrong!');
-    });
+  const posts = await PostsModel.findAll(query).catch(error => {
+    console.log(error);
+    throw new Error('Something went wrong!');
+  });
 
-  const postsMap = posts.map((post) => utils.array.sequelizeResponse(
-    post,
-    'id',
-    'user_id',
-    'views',
-    'title',
-    'body',
-    'tags',
-    'username',
-    'gravatar',
-    'created_at',
-    'updated_at',
-  ));
+  const postsMap = posts.map(post =>
+    utils.array.sequelizeResponse(
+      post,
+      'id',
+      'user_id',
+      'views',
+      'title',
+      'body',
+      'tags',
+      'username',
+      'gravatar',
+      'created_at',
+      'updated_at'
+    )
+  );
 
   if (utils.conditional.isArrayEmpty(postsMap)) {
     throw new Error('There are no posts');
@@ -161,33 +157,41 @@ exports.retrieveAll = async (tagName = '') => {
   return postsMap;
 };
 
-exports.countCommentsForOne = async (postId) => await PostsModel.count({
-  where: {
-    id: postId,
-  },
-  include: {
-    model: CommentsModel,
-    required: false,
-    attributes: [],
-  },
-}).catch((error) => {
-  console.log(error);
-  return result(responseHandler(false, 500, 'Something went wrong!', null), null);
-});
+exports.countCommentsForOne = async postId =>
+  await PostsModel.count({
+    where: {
+      id: postId,
+    },
+    include: {
+      model: CommentsModel,
+      required: false,
+      attributes: [],
+    },
+  }).catch(error => {
+    console.log(error);
+    return result(
+      responseHandler(false, 500, 'Something went wrong!', null),
+      null
+    );
+  });
 
-exports.countAnswersForOne = async (postId) => await PostsModel.count({
-  where: {
-    id: postId,
-  },
-  include: {
-    model: AnswersModel,
-    required: false,
-    attributes: [],
-  },
-}).catch((error) => {
-  console.log(error);
-  return result(responseHandler(false, 500, 'Something went wrong!', null), null);
-});
+exports.countAnswersForOne = async postId =>
+  await PostsModel.count({
+    where: {
+      id: postId,
+    },
+    include: {
+      model: AnswersModel,
+      required: false,
+      attributes: [],
+    },
+  }).catch(error => {
+    console.log(error);
+    return result(
+      responseHandler(false, 500, 'Something went wrong!', null),
+      null
+    );
+  });
 
 exports.countForAll = async (tagName = '') => {
   const req = {
@@ -225,10 +229,8 @@ exports.countForAll = async (tagName = '') => {
     });
   }
 
-  return await PostsModel
-    .findAll(req)
-    .catch((error) => {
-      console.log(error);
-      throw error;
-    });
+  return await PostsModel.findAll(req).catch(error => {
+    console.log(error);
+    throw error;
+  });
 };

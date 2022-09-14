@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 
-const { responseHandler, getJwtToken } = require('../helpers');
-const { UsersRepository } = require('../repositories');
+const {responseHandler, getJwtToken} = require('../helpers');
+const {UsersRepository} = require('../repositories');
 
 exports.register = async (newUser, result) => {
   const salt = await bcrypt.genSalt(10);
@@ -21,28 +21,17 @@ exports.register = async (newUser, result) => {
 };
 
 exports.login = async (newUser, result) => {
-  const user = await UsersRepository.retrieveOne({ username: newUser.username });
+  const user = await UsersRepository.retrieveOne({username: newUser.username});
 
   if (user === null) {
-    result(
-      responseHandler(
-        false,
-        404,
-        'User does not exists',
-        null,
-      ),
-      null,
-    );
+    result(responseHandler(false, 404, 'User does not exists', null), null);
     return null;
   }
 
   const isMatch = await bcrypt.compare(newUser.password, user.password);
 
   if (!isMatch) {
-    result(
-      responseHandler(false, 400, 'Incorrect password', null),
-      null,
-    );
+    result(responseHandler(false, 400, 'Incorrect password', null), null);
 
     return null;
   }
@@ -58,7 +47,7 @@ exports.login = async (newUser, result) => {
   return payload;
 };
 
-exports.retrieveAll = (result) => UsersRepository.retrieveAll(result);
+exports.retrieveAll = result => UsersRepository.retrieveAll(result);
 
 exports.retrieveOne = async (id, result) => {
   await UsersRepository.incrementViews(id);
@@ -69,6 +58,6 @@ exports.retrieveOne = async (id, result) => {
 };
 
 exports.loadUser = async (userId, result) => {
-  const response = await UsersRepository.retrieveOne({ id: userId }, result);
+  const response = await UsersRepository.retrieveOne({id: userId}, result);
   result(null, responseHandler(true, 200, 'Success', response));
 };

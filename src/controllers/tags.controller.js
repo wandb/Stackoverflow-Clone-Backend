@@ -1,5 +1,5 @@
-const { responseHandler, asyncHandler } = require('../helpers');
-const { tagsService } = require('../services');
+const {responseHandler, asyncHandler} = require('../helpers');
+const {tagsService} = require('../services');
 
 exports.getTags = asyncHandler(async (req, res) => {
   try {

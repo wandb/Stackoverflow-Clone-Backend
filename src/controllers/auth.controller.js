@@ -1,8 +1,8 @@
-const { validationResult } = require('express-validator');
-const { responseHandler, asyncHandler } = require('../helpers');
-const { usersService } = require('../services');
+const {validationResult} = require('express-validator');
+const {responseHandler, asyncHandler} = require('../helpers');
+const {usersService} = require('../services');
 
-const User = (user) => ({
+const User = user => ({
   username: user.username,
   password: user.password,
 });

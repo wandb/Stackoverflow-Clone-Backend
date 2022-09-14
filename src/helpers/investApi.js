@@ -1,7 +1,7 @@
 const axios = require('axios');
 const constantsHolder = require('../constants');
 
-exports.fetchTagDesc = async (tags) => {
+exports.fetchTagDesc = async tags => {
   const url = `${constantsHolder.API_BASE_URL}/tags/${tags}/wikis?site=stackoverflow`;
 
   const options = {
@@ -13,9 +13,10 @@ exports.fetchTagDesc = async (tags) => {
     json: true,
   };
 
-  const response = await axios.get(url, options)
-    .then((json) => json.data.items)
-    .catch((err) => {
+  const response = await axios
+    .get(url, options)
+    .then(json => json.data.items)
+    .catch(err => {
       console.log('error:', err);
     });
 
@@ -32,7 +33,8 @@ exports.prepareTags = (tags, response) => {
   const resp = [];
 
   for (const tag of tags) {
-    const foundTag = response.length && response.find((t) => t.tag_name === tag.toLowerCase());
+    const foundTag =
+      response.length && response.find(t => t.tag_name === tag.toLowerCase());
     const obj = {
       tagname: tag,
       description: '',

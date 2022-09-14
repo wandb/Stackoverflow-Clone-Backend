@@ -1,8 +1,8 @@
-const { validationResult } = require('express-validator');
-const { responseHandler, asyncHandler } = require('../helpers');
-const { postsService } = require('../services');
+const {validationResult} = require('express-validator');
+const {responseHandler, asyncHandler} = require('../helpers');
+const {postsService} = require('../services');
 
-const Post = (post) => ({
+const Post = post => ({
   title: post.title,
   body: post.body,
   userId: post.userId,
@@ -31,16 +31,13 @@ exports.getTagPosts = asyncHandler(async (req, res) => {
   const tagName = req.params.tagname;
 
   try {
-    await postsService.retrieveAllTag(
-      tagName,
-      (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.status(err.code).json(err);
-        }
-        return res.status(data.code).json(data);
-      },
-    );
+    await postsService.retrieveAllTag(tagName, (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.status(err.code).json(err);
+      }
+      return res.status(data.code).json(data);
+    });
   } catch (err) {
     console.log(err);
     return res

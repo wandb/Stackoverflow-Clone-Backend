@@ -1,5 +1,5 @@
 const db = require('../config/db.config');
-const { responseHandler, investApi } = require('../helpers');
+const {responseHandler, investApi} = require('../helpers');
 const utils = require('../utils');
 const {
   PostsRepository,
@@ -14,10 +14,13 @@ exports.create = async (newPost, result) => {
   try {
     transaction = await db.transaction();
 
-    const tags = newPost.tagName.split(',').map((item) => item.trim());
+    const tags = newPost.tagName.split(',').map(item => item.trim());
 
     if (tags.length > 5) {
-      return result(responseHandler(false, 400, 'Only Tags Upto 5 Are Allowed', null), null);
+      return result(
+        responseHandler(false, 400, 'Only Tags Upto 5 Are Allowed', null),
+        null
+      );
     }
 
     const post = await PostsRepository.create(newPost, result);
@@ -85,10 +88,7 @@ exports.remove = async (id, result) => {
 
     await PostsRepository.remove(id, t);
 
-    result(
-      null,
-      responseHandler(true, 200, 'Post Removed', null),
-    );
+    result(null, responseHandler(true, 200, 'Post Removed', null));
 
     await t.commit();
   } catch (error) {
@@ -116,12 +116,14 @@ exports.retrieveOne = async (postId, result) => {
   return result(null, responseHandler(true, 200, 'Success', response));
 };
 
-exports.retrieveAll = async (result) => {
+exports.retrieveAll = async result => {
   const postsMap = await PostsRepository.retrieveAll();
 
   const postCounts = await PostsRepository.countForAll();
 
-  const postCountsMap = postCounts.map((post) => utils.array.sequelizeResponse(post, 'id', 'answer_count', 'comment_count'));
+  const postCountsMap = postCounts.map(post =>
+    utils.array.sequelizeResponse(post, 'id', 'answer_count', 'comment_count')
+  );
 
   const response = utils.array.mergeById(postsMap, postCountsMap);
 
@@ -133,7 +135,9 @@ exports.retrieveAllTag = async (tagName, result) => {
 
   const postCounts = await PostsRepository.countForAll();
 
-  const postCountsMap = postCounts.map((post) => utils.array.sequelizeResponse(post, 'id', 'answer_count', 'comment_count'));
+  const postCountsMap = postCounts.map(post =>
+    utils.array.sequelizeResponse(post, 'id', 'answer_count', 'comment_count')
+  );
 
   const response = utils.array.mergeById(postsMap, postCountsMap);
 

@@ -1,27 +1,30 @@
+exports.PORT = normalizePort(process.env.PORT || '1337');
+
 // Normalize a port into a number, string, or false.
-exports.normalizePort = (val) => {
-  const PORT = parseInt(val, 10);
+function normalizePort(val) {
+  const port = parseInt(val, 10);
 
   // eslint-disable-next-line no-restricted-globals
-  if (isNaN(PORT)) {
+  if (isNaN(port)) {
     // named pipe
     return val;
   }
 
-  if (PORT >= 0) {
+  if (port >= 0) {
     // port number
-    return PORT;
+    return port;
   }
 
   return false;
-};
+}
 
 // Event listener for HTTP server "error" event.
-exports.onError = (error) => {
+exports.onError = error => {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
+  const port = exports.PORT;
   const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
 
   // handle specific listen errors with friendly messages

@@ -1,11 +1,14 @@
-const { Sequelize } = require('sequelize');
+const {Sequelize} = require('sequelize');
 const dotenv = require('dotenv');
 
 const config = require('./index');
 
 dotenv.config();
 
-const sequelize = new Sequelize(config.DB.DATABASE, config.DB.USER, config.DB.PASSWORD,
+const sequelize = new Sequelize(
+  config.DB.DATABASE,
+  config.DB.USER,
+  config.DB.PASSWORD,
   {
     dialect: 'mysql',
     host: config.DB.HOST,
@@ -18,7 +21,8 @@ const sequelize = new Sequelize(config.DB.DATABASE, config.DB.USER, config.DB.PA
       acquire: 30000,
       idle: 10000,
     },
-  });
+  }
+);
 
 (async () => await sequelize.sync())();
 

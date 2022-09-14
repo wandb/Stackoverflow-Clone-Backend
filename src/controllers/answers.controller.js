@@ -1,8 +1,8 @@
-const { validationResult } = require('express-validator');
-const { responseHandler, asyncHandler } = require('../helpers');
-const { answersService } = require('../services');
+const {validationResult} = require('express-validator');
+const {responseHandler, asyncHandler} = require('../helpers');
+const {answersService} = require('../services');
 
-const Answer = (answer) => ({
+const Answer = answer => ({
   body: answer.body,
   userId: answer.userId,
   postId: answer.postId,
